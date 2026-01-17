@@ -1,0 +1,23 @@
+{
+  "name": "mediawiki-file-url",
+  "version": "0.1.0",
+  "description": "Convert MediaWiki filenames into hashed upload URLs",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "mediawiki",
+    "md5"
+  ],
+  "author": "t7ru",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t7ru/mediawiki-file-url.git"
+  }
+}
