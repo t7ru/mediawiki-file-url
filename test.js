@@ -6,6 +6,8 @@ import {
   mwWithBaseUrl,
 } from "./index.js";
 
+let hasFailures = false;
+
 console.log("=== Wiki File Converter Tests ===\n");
 
 // 1
@@ -16,6 +18,7 @@ try {
   console.log(` - Output: ${url1}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 2
@@ -26,6 +29,7 @@ try {
   console.log(` - Output: ${url2}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 3
@@ -39,6 +43,7 @@ try {
   console.log(` - Output: ${url3}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 4
@@ -49,6 +54,7 @@ try {
   console.log(` - Output: ${url4}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 5
@@ -59,6 +65,7 @@ try {
   console.log(` - Output: ${url5}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 6
@@ -69,6 +76,7 @@ try {
   console.log(` - Output: ${url6}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 7
@@ -79,6 +87,7 @@ try {
   console.log(` - Output: ${url7}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 8
@@ -105,6 +114,7 @@ try {
   mwSetBaseUrl(previous);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 9
@@ -122,6 +132,7 @@ try {
   console.log(` - Output (wiki):     ${url9b}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
+  hasFailures = true;
 }
 
 // 10
@@ -129,6 +140,7 @@ console.log("Test 10: Error handling - empty string");
 try {
   mwFileUrl("");
   console.error("[Fail] Should have thrown an error\n");
+  hasFailures = true;
 } catch (error) {
   console.log("[Pass] Correctly caught error:", error.message, "\n");
 }
@@ -138,8 +150,11 @@ console.log("Test 11: Error handling - invalid wiki syntax");
 try {
   mwWikiFileUrl("Category:WarlockLevel1.png");
   console.error("[Fail] Should have thrown an error\n");
+  hasFailures = true;
 } catch (error) {
   console.log("[Pass] Correctly caught error:", error.message, "\n");
 }
+
+if (hasFailures) process.exit(1);
 
 console.log("=== All tests completed ===");
