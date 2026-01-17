@@ -143,8 +143,7 @@ function md5(message) {
  * Default base URL used by mwFileUrl/mwWikiFileUrl when no baseUrl argument is provided.
  * This can be changed at runtime via mwSetBaseUrl().
  */
-const DEFAULT_BASE_URL =
-  "https://static.wikia.nocookie.net/tower-defense-sim/images";
+const DEFAULT_BASE_URL = "https://upload.wikimedia.org/wikipedia/commons/";
 let defaultBaseUrl = DEFAULT_BASE_URL;
 
 /**

@@ -11,10 +11,10 @@ let hasFailures = false;
 console.log("=== Wiki File Converter Tests ===\n");
 
 // 1
-console.log("Test 1: Basic filename conversion (TDS Wiki)");
+console.log("Test 1: Basic filename conversion (MediaWiki Commons)");
 try {
-  const url1 = mwFileUrl("WarlockLevel1.png");
-  console.log('[Pass] Input: "WarlockLevel1.png"');
+  const url1 = mwFileUrl("Tesla_circa_1890.jpeg");
+  console.log('[Pass] Input: "Tesla_circa_1890.jpeg"');
   console.log(` - Output: ${url1}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
@@ -24,8 +24,12 @@ try {
 // 2
 console.log("Test 2: Filename with spaces (normalized to underscores)");
 try {
-  const url2 = mwFileUrl("Remake Fungi Island View.png");
-  console.log('[Pass] Input: "Remake Fungi Island View.png"');
+  const url2 = mwFileUrl(
+    "Mamoru Shigemitsu signs the Instrument of Surrender, officially ending the Second World War.jpg",
+  );
+  console.log(
+    '[Pass] Input: "Mamoru Shigemitsu signs the Instrument of Surrender, officially ending the Second World War.jpg"',
+  );
   console.log(` - Output: ${url2}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
@@ -49,8 +53,8 @@ try {
 // 4
 console.log('Test 4: Wiki syntax conversion ("File:")');
 try {
-  const url4 = mwWikiFileUrl("File:WarlockLevel1.png");
-  console.log('[Pass] Input: "File:WarlockLevel1.png"');
+  const url4 = mwWikiFileUrl("File:Tesla_circa_1890.jpeg");
+  console.log('[Pass] Input: "File:Tesla_circa_1890.jpeg"');
   console.log(` - Output: ${url4}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
@@ -60,8 +64,8 @@ try {
 // 5
 console.log('Test 5: Wiki syntax conversion ("Image:")');
 try {
-  const url5 = mwWikiFileUrl("Image:WarlockLevel1.png");
-  console.log('[Pass] Input: "Image:WarlockLevel1.png"');
+  const url5 = mwWikiFileUrl("Image:Tesla_circa_1890.jpeg");
+  console.log('[Pass] Input: "Image:Tesla_circa_1890.jpeg"');
   console.log(` - Output: ${url5}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
@@ -71,8 +75,12 @@ try {
 // 6
 console.log("Test 6: Wiki syntax with spaces");
 try {
-  const url6 = mwWikiFileUrl("File:Remake Fungi Island View.png");
-  console.log('[Pass] Input: "File:Remake Fungi Island View.png"');
+  const url6 = mwWikiFileUrl(
+    "File:Mamoru Shigemitsu signs the Instrument of Surrender, officially ending the Second World War.jpg",
+  );
+  console.log(
+    '[Pass] Input: "File:Mamoru Shigemitsu signs the Instrument of Surrender, officially ending the Second World War.jpg"',
+  );
   console.log(` - Output: ${url6}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
@@ -82,8 +90,12 @@ try {
 // 7
 console.log("Test 7: Wiki syntax trimming");
 try {
-  const url7 = mwWikiFileUrl("  Image:   Some Tower Name.png   ");
-  console.log('[Pass] Input: "  Image:   Some Tower Name.png   "');
+  const url7 = mwWikiFileUrl(
+    "  Image:   Wolfgang Amadé Mozart as a Boy.jpg   ",
+  );
+  console.log(
+    '[Pass] Input: "  Image:   Wolfgang Amadé Mozart as a Boy.jpg   "',
+  );
   console.log(` - Output: ${url7}\n`);
 } catch (error) {
   console.error("[Fail] Error:", error.message, "\n");
@@ -120,12 +132,12 @@ try {
 // 9
 console.log("Test 9: mwWithBaseUrl(baseUrl)");
 try {
-  const baseUrl = "https://wiki.archlinux.org/images";
-  const { mwFileUrl: archFileUrl, mwWikiFileUrl: archWikiFileUrl } =
+  const baseUrl = "https://static.wikia.nocookie.net/tower-defense-sim/images";
+  const { mwFileUrl: tdswFileUrl, mwWikiFileUrl: tdswWikiFileUrl } =
     mwWithBaseUrl(baseUrl);
 
-  const url9a = archFileUrl("Tango-edit-clear.svg");
-  const url9b = archWikiFileUrl("File:Tango-edit-clear.svg");
+  const url9a = tdswFileUrl("WarlockLevel1.png");
+  const url9b = tdswWikiFileUrl("File:WarlockLevel2.png");
 
   console.log("[Pass] Created bound converters using mwWithBaseUrl()");
   console.log(` - Output (filename): ${url9a}`);

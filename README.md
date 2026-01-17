@@ -15,8 +15,8 @@ import {
   mwWithBaseUrl,
 } from "mediawiki-file-url";
 
-// From a plain filename (default base URL is set to the TDS Wiki images root)
-const url1 = mwFileUrl("WarlockLevel1.png");
+// From a plain filename (default base URL is set to Wikimedia Commons uploads root)
+const url1 = mwFileUrl("Tesla_circa_1890.jpeg");
 
 // Set a module-wide default base URL once (used when you omit baseUrl)
 mwSetBaseUrl("https://wiki.archlinux.org/images");
