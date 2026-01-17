@@ -189,7 +189,7 @@ export function mwFileUrl(filename, baseUrl) {
     const normalizedFilename = filename.replace(/ /g, "_");
 
     // Yada yada give me the md5
-    const md5Hash = md5(normalizedFilename);
+    const md5Hash = md5(unescape(encodeURIComponent(normalizedFilename)));
     const firstChar = md5Hash.charAt(0);
     const firstTwoChars = md5Hash.substring(0, 2);
     const cleanBaseUrl = effectiveBaseUrl.endsWith("/")
@@ -197,7 +197,7 @@ export function mwFileUrl(filename, baseUrl) {
       : effectiveBaseUrl;
 
     // baseUrl/a/ab/Filename.png
-    const finalUrl = `${cleanBaseUrl}/${firstChar}/${firstTwoChars}/${encodeURIComponent(normalizedFilename)}`;
+    const finalUrl = `${cleanBaseUrl}/${firstChar}/${firstTwoChars}/${normalizedFilename}`;
 
     return finalUrl;
   } catch (error) {
