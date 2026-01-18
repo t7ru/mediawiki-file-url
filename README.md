@@ -15,18 +15,21 @@ import {
   mwWithBaseUrl,
 } from "mediawiki-file-url";
 
-// From a plain filename (default base URL is set to Wikimedia Commons uploads root)
+// Default base URL is set to Wikimedia Commons uploads root
 const url1 = mwFileUrl("Tesla_circa_1890.jpeg");
 
-// Set a module-wide default base URL once (used when you omit baseUrl)
+// From a wiki that isn't default
+const url2 = mwFileUrl("Place.png", https://static.wikia.nocookie.net/tower-defense-sim/images/);
+
+// Set a module-wide default base URL once
 mwSetBaseUrl("https://wiki.archlinux.org/images");
-const url2 = mwFileUrl("Tango-edit-clear.svg");
-const url3 = mwWikiFileUrl("File:Tango-edit-clear.svg");
+const url3 = mwFileUrl("Tango-edit-clear.svg");
+const url4 = mwWikiFileUrl("File:Tango-edit-clear.svg");
 
 // Or create bound converters for one base URL (recommended if you need multiple wikis)
 const lol = mwWithBaseUrl("https://wiki.leagueoflegends.com/en-us/images");
-const url4 = lol.mwFileUrl("Champions_Mesh_concept_03.jpg");
-const url5 = lol.mwWikiFileUrl("  Image:   Champions_Mesh_concept_02.jpg   ");
+const url5 = lol.mwFileUrl("Champions_Mesh_concept_03.jpg");
+const url6 = lol.mwWikiFileUrl("  Image:   Champions_Mesh_concept_02.jpg   ");
 ```
 
 ## API
@@ -52,3 +55,4 @@ Returns `{ mwFileUrl, mwWikiFileUrl }` functions bound to a specific `baseUrl`, 
 ## Notes
 - ESM only.
 - If a wiki uses a custom hashed layout, it won't work.
+- If you want an actually authoritative source, use [Imageinfo](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Imageinfo) instead.
