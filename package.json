@@ -1,6 +1,6 @@
 {
   "name": "mediawiki-file-url",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Convert MediaWiki filenames into hashed upload URLs",
   "main": "index.js",
   "types": "index.d.ts",

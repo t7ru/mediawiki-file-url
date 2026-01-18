@@ -188,10 +188,16 @@ export function mwFileUrl(filename, baseUrl) {
     // Normalize spaces to underscores (cuz MediaWiki does that)
     const normalizedFilename = filename.replace(/ /g, "_");
 
+    // MediaWiki wants UTF-8 bytes because woohoo legacy code! ain't that beautiful
+    const utf8Bytes = new TextEncoder().encode(normalizedFilename);
+    let binary = "";
+    for (let i = 0; i < utf8Bytes.length; i++) {
+      binary += String.fromCharCode(utf8Bytes[i]);
+    }
+
     // Yada yada give me the md5
-    const md5Hash = md5(unescape(encodeURIComponent(normalizedFilename)));
-    const firstChar = md5Hash.charAt(0);
-    const firstTwoChars = md5Hash.substring(0, 2);
+    const firstChar = md5(binary).charAt(0);
+    const firstTwoChars = md5(binary).substring(0, 2);
     const cleanBaseUrl = effectiveBaseUrl.endsWith("/")
       ? effectiveBaseUrl.slice(0, -1)
       : effectiveBaseUrl;
