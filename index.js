@@ -2,7 +2,7 @@
  * Itsy bitsy MD5 implementation since browsers don't support MD5.
  * Based on the public domain implementation by Joseph Myers.
  */
-function md5(message) {
+function md5(bytes) {
 	function safe_add(x, y) {
 		const lsw = (x & 0xffff) + (y & 0xffff);
 		const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
@@ -29,14 +29,14 @@ function md5(message) {
 		return md5_cmn(c ^ (b | ~d), a, b, x, s, t);
 	}
 
-	function str2binl(str) {
-		const nblk = ((str.length + 8) >> 6) + 1;
+	function bytes2binl(bytes) {
+		const len = bytes.length;
+		const nblk = ((len + 8) >> 6) + 1;
 		const blks = Array(nblk * 16);
 		for (let i = 0; i < nblk * 16; i++) blks[i] = 0;
-		for (let i = 0; i < str.length; i++)
-			blks[i >> 2] |= str.charCodeAt(i) << ((i % 4) * 8);
-		blks[i >> 2] |= 0x80 << ((i % 4) * 8);
-		blks[nblk * 16 - 2] = str.length * 8;
+		for (let i = 0; i < len; i++) blks[i >> 2] |= bytes[i] << ((i % 4) * 8);
+		blks[len >> 2] |= 0x80 << ((len % 4) * 8);
+		blks[nblk * 16 - 2] = len * 8;
 		return blks;
 	}
 
@@ -51,7 +51,7 @@ function md5(message) {
 		return str;
 	}
 
-	const x = str2binl(message);
+	const x = bytes2binl(bytes);
 	let a = 1732584193;
 	let b = -271733879;
 	let c = -1732584194;
@@ -190,14 +190,11 @@ export function mwFileUrl(filename, baseUrl) {
 
 		// MediaWiki wants UTF-8 bytes because woohoo legacy code! ain't that beautiful
 		const utf8Bytes = new TextEncoder().encode(normalizedFilename);
-		let binary = "";
-		for (let i = 0; i < utf8Bytes.length; i++) {
-			binary += String.fromCharCode(utf8Bytes[i]);
-		}
 
 		// Yada yada give me the md5
-		const firstChar = md5(binary).charAt(0);
-		const firstTwoChars = md5(binary).substring(0, 2);
+		const hash = md5(utf8Bytes);
+		const firstChar = hash.charAt(0);
+		const firstTwoChars = hash.substring(0, 2);
 		const cleanBaseUrl = effectiveBaseUrl.endsWith("/")
 			? effectiveBaseUrl.slice(0, -1)
 			: effectiveBaseUrl;
