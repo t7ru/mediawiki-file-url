@@ -19,37 +19,51 @@ export function getDefaultBaseUrl(): string;
  *
  * @param filename The filename (for example, "WarlockLevel1.png")
  * @param baseUrl The base URL for images (defaults to configured defaultBaseUrl)
+ * @param capitalLinks Match $wgCapitalLinks (ucfirst). Defaults to true.
  * @returns The full MediaWiki URL
  * @throws {Error} If filename is invalid or hashing fails
  */
-export function mwFileUrl(filename: string, baseUrl?: string): string;
+export function mwFileUrl(
+	filename: string,
+	baseUrl?: string,
+	capitalLinks?: boolean,
+): string;
 
 /**
  * Create converters bound to a baseUrl so one does not have to pass it each time.
  *
  * @param baseUrl The base URL to bind to
+ * @param capitalLinks Match $wgCapitalLinks (ucfirst). Defaults to true.
  * @returns An object containing bound versions of mwFileUrl and mwWikiFileUrl
  */
-export function mwWithBaseUrl(baseUrl: string): {
-    mwFileUrl: (filename: string) => string;
-    mwWikiFileUrl: (wikiSyntax: string) => string;
+export function mwWithBaseUrl(
+	baseUrl: string,
+	capitalLinks?: boolean,
+): {
+	mwFileUrl: (filename: string) => string;
+	mwWikiFileUrl: (wikiSyntax: string) => string;
 };
 
 /**
  * Converts a File:/Image: syntax to a MediaWiki URL
  * @param wikiSyntax The wiki syntax (for example, "File:WarlockLevel1.png")
  * @param baseUrl The base URL for images
+ * @param capitalLinks Match $wgCapitalLinks (ucfirst). Defaults to true.
  * @returns The full MediaWiki URL
  * @throws {Error} If syntax is invalid or conversion fails
  */
-export function mwWikiFileUrl(wikiSyntax: string, baseUrl?: string): string;
+export function mwWikiFileUrl(
+	wikiSyntax: string,
+	baseUrl?: string,
+	capitalLinks?: boolean,
+): string;
 
 declare const _default: {
-    mwFileUrl: typeof mwFileUrl;
-    mwWikiFileUrl: typeof mwWikiFileUrl;
-    mwSetBaseUrl: typeof mwSetBaseUrl;
-    getDefaultBaseUrl: typeof getDefaultBaseUrl;
-    mwWithBaseUrl: typeof mwWithBaseUrl;
+	mwFileUrl: typeof mwFileUrl;
+	mwWikiFileUrl: typeof mwWikiFileUrl;
+	mwSetBaseUrl: typeof mwSetBaseUrl;
+	getDefaultBaseUrl: typeof getDefaultBaseUrl;
+	mwWithBaseUrl: typeof mwWithBaseUrl;
 };
 
 export default _default;

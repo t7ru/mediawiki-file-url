@@ -14,7 +14,10 @@ function md5(bytes) {
 	}
 
 	function md5_cmn(q, a, b, x, s, t) {
-		return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
+		return safe_add(
+			bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s),
+			b,
+		);
 	}
 	function md5_ff(a, b, c, d, x, s, t) {
 		return md5_cmn((b & c) | (~b & d), a, b, x, s, t);
@@ -174,10 +177,11 @@ export function getDefaultBaseUrl() {
  *
  * @param {string} filename - The filename (for example, "WarlockLevel1.png")
  * @param {string} [baseUrl] - The base URL for images (defaults to configured defaultBaseUrl)
+ * @param {boolean} [capitalLinks=true] - Match $wgCapitalLinks (ucfirst). Defaults to true.
  * @returns {string} The full MediaWiki URL
  * @throws {Error} If filename is invalid or hashing fails
  */
-export function mwFileUrl(filename, baseUrl) {
+export function mwFileUrl(filename, baseUrl, capitalLinks = true) {
 	if (!filename || typeof filename !== "string") {
 		throw new Error("Filename must be a non-empty string");
 	}
@@ -186,7 +190,13 @@ export function mwFileUrl(filename, baseUrl) {
 
 	try {
 		// Normalize spaces to underscores (cuz MediaWiki does that)
-		const normalizedFilename = filename.replace(/ /g, "_");
+		let normalizedFilename = filename.replace(/ /g, "_");
+		// https://www.mediawiki.org/wiki/Manual:$wgCapitalLinks
+		if (capitalLinks) {
+			normalizedFilename =
+				normalizedFilename.charAt(0).toUpperCase() +
+				normalizedFilename.slice(1);
+		}
 
 		// MediaWiki wants UTF-8 bytes because woohoo legacy code! ain't that beautiful
 		const utf8Bytes = new TextEncoder().encode(normalizedFilename);
@@ -214,16 +224,18 @@ export function mwFileUrl(filename, baseUrl) {
  * Create converters bound to a baseUrl so one does not have to pass it each time.
  *
  * @param {string} baseUrl
+ * @param {boolean} [capitalLinks=true] - Match $wgCapitalLinks (ucfirst). Defaults to true.
  * @returns {{ mwFileUrl: (filename: string) => string, mwWikiFileUrl: (wikiSyntax: string) => string }}
  */
-export function mwWithBaseUrl(baseUrl) {
+export function mwWithBaseUrl(baseUrl, capitalLinks = true) {
 	if (!baseUrl || typeof baseUrl !== "string") {
 		throw new Error("Base URL must be a non-empty string");
 	}
 
 	return {
-		mwFileUrl: (filename) => mwFileUrl(filename, baseUrl),
-		mwWikiFileUrl: (wikiSyntax) => mwWikiFileUrl(wikiSyntax, baseUrl),
+		mwFileUrl: (filename) => mwFileUrl(filename, baseUrl, capitalLinks),
+		mwWikiFileUrl: (wikiSyntax) =>
+			mwWikiFileUrl(wikiSyntax, baseUrl, capitalLinks),
 	};
 }
 
@@ -231,10 +243,11 @@ export function mwWithBaseUrl(baseUrl) {
  * Converts a File:/Image: syntax to a MediaWiki URL
  * @param {string} wikiSyntax - The wiki syntax (for example, "File:WarlockLevel1.png")
  * @param {string} [baseUrl] - The base URL for images
+ * @param {boolean} [capitalLinks=true] - Match $wgCapitalLinks (ucfirst). Defaults to true.
  * @returns {string} The full MediaWiki URL
  * @throws {Error} If syntax is invalid or conversion fails
  */
-export function mwWikiFileUrl(wikiSyntax, baseUrl) {
+export function mwWikiFileUrl(wikiSyntax, baseUrl, capitalLinks = true) {
 	if (!wikiSyntax || typeof wikiSyntax !== "string") {
 		throw new Error("Wiki syntax must be a non-empty string");
 	}
@@ -243,12 +256,12 @@ export function mwWikiFileUrl(wikiSyntax, baseUrl) {
 
 	if (trimmed.startsWith("File:")) {
 		const filename = trimmed.substring(5).trim();
-		return mwFileUrl(filename, baseUrl);
+		return mwFileUrl(filename, baseUrl, capitalLinks);
 	}
 
 	if (trimmed.startsWith("Image:")) {
 		const filename = trimmed.substring(6).trim();
-		return mwFileUrl(filename, baseUrl);
+		return mwFileUrl(filename, baseUrl, capitalLinks);
 	}
 
 	throw new Error('Wiki syntax must start with "File:" or "Image:"');

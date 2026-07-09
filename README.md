@@ -1,12 +1,15 @@
 # mediawiki-file-url
+
 Convert MediaWiki filenames into its hashed upload URLs on wikis with `$wgHashedUploadDirectory` enabled.
 
 ## Install
+
 ```
 npm i mediawiki-file-url
 ```
 
 ## Usage
+
 ```js
 import {
   mwFileUrl,
@@ -33,26 +36,34 @@ const url6 = lol.mwWikiFileUrl("  Image:   Champions_Mesh_concept_02.jpg   ");
 ```
 
 ## API
-### `mwFileUrl(filename, [baseUrl])`
+
+### `mwFileUrl(filename, [baseUrl], [capitalLinks])`
 
 - `filename` (string) - e.g. `"My Image.png"`
-- `baseUrl` (string, optional) — if omitted, uses the configured default base URL (which is the Tower Defense Simulator Wiki)
+- `baseUrl` (string, optional) — if omitted, uses the configured default base URL
+- `capitalLinks` (boolean, optional, default `true`) — matches MediaWiki `$wgCapitalLinks` (ucfirst). Pass `false` to opt-out
 
 Returns the hashed upload URL.
 
-### `mwWikiFileUrl(wikiSyntax, [baseUrl])`
+### `mwWikiFileUrl(wikiSyntax, [baseUrl], [capitalLinks])`
+
 - `wikiSyntax` (string) - must start with `File:` or `Image:` (whitespace is trimmed)
 - `baseUrl` (string, optional) — if omitted, uses the configured default base URL
+- `capitalLinks` (boolean, optional, default `true`) — same as `mwFileUrl`
 
 Extracts the filename and calls `mwFileUrl`.
 
 ### `mwSetBaseUrl(baseUrl)`
+
 Sets the module-wide default base URL used by `mwFileUrl` / `mwWikiFileUrl` when `baseUrl` is omitted.
 
-### `mwWithBaseUrl(baseUrl)`
-Returns `{ mwFileUrl, mwWikiFileUrl }` functions bound to a specific `baseUrl`, so you don’t have to pass it each call.
+### `mwWithBaseUrl(baseUrl, [capitalLinks])`
+
+Returns `{ mwFileUrl, mwWikiFileUrl }` functions bound to a specific `baseUrl` (and optional `capitalLinks`), so you don’t have to pass them each call.
 
 ## Notes
+
 - ESM only.
+- Spaces are normalized to underscores; with `capitalLinks` true (default), the first character is uppercased (MediaWiki `$wgCapitalLinks`).
 - If a wiki uses a custom hashed layout, it won't work.
 - If you want an actually authoritative source, use [Imageinfo](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Imageinfo) instead.

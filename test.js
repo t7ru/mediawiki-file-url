@@ -174,7 +174,54 @@ try {
 
 // 10
 try {
-  console.log("Test 10: Error handling - empty string");
+  const url10 = mwFileUrl("tesla_circa_1890.jpeg");
+  check(
+    'Test 10: capitalLinks true (default) ucfirsts - Input: "tesla_circa_1890.jpeg"',
+    url10,
+    "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg",
+  );
+} catch (error) {
+  console.error("[Fail] Test 10 Error:", error.message, "\n");
+  hasFailures = true;
+}
+
+// 11
+try {
+  const url11a = mwFileUrl("tesla_circa_1890.jpeg", undefined, false);
+  const url11b = mwFileUrl("Tesla_circa_1890.jpeg", undefined, false);
+  check(
+    'Test 11a: capitalLinks false preserves lowercase - Input: "tesla_circa_1890.jpeg"',
+    url11a,
+    "https://upload.wikimedia.org/wikipedia/commons/4/4a/tesla_circa_1890.jpeg",
+  );
+  check(
+    'Test 11b: capitalLinks false preserves existing capital - Input: "Tesla_circa_1890.jpeg"',
+    url11b,
+    "https://upload.wikimedia.org/wikipedia/commons/7/79/Tesla_circa_1890.jpeg",
+  );
+} catch (error) {
+  console.error("[Fail] Test 11 Error:", error.message, "\n");
+  hasFailures = true;
+}
+
+// 12
+try {
+  const baseUrl = "https://static.wikia.nocookie.net/tower-defense-sim/images";
+  const { mwFileUrl: noCap } = mwWithBaseUrl(baseUrl, false);
+  const url12 = noCap("warlockLevel1.png");
+  check(
+    'Test 12: mwWithBaseUrl(..., false) - Input: "warlockLevel1.png"',
+    url12,
+    "https://static.wikia.nocookie.net/tower-defense-sim/images/5/54/warlockLevel1.png",
+  );
+} catch (error) {
+  console.error("[Fail] Test 12 Error:", error.message, "\n");
+  hasFailures = true;
+}
+
+// 13
+try {
+  console.log("Test 13: Error handling - empty string");
   mwFileUrl("");
   console.error("[Fail] Should have thrown an error\n");
   hasFailures = true;
@@ -189,9 +236,9 @@ try {
   }
 }
 
-// 11
+// 14
 try {
-  console.log("Test 11: Error handling - invalid wiki syntax");
+  console.log("Test 14: Error handling - invalid wiki syntax");
   mwWikiFileUrl("Category:WarlockLevel1.png");
   console.error("[Fail] Should have thrown an error\n");
   hasFailures = true;
